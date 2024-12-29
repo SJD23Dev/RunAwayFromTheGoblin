@@ -24,4 +24,5 @@ public:
     Game();
     void run();
     void drawGrid();
+    void handleInput(sf::Event::KeyEvent event);
 };

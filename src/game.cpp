@@ -24,6 +24,43 @@ void Game::drawGrid() {
     }
 }
 
+void Game::handleInput(sf::Event::KeyEvent event) {
+    switch (event.code) {
+        case sf::Keyboard::Numpad1:
+            playerPosition.x -= GRID_SIZE;
+            playerPosition.y += GRID_SIZE;
+            break;
+        case sf::Keyboard::Numpad2:
+            playerPosition.y += GRID_SIZE;
+            break;
+        case sf::Keyboard::Numpad3:
+            playerPosition.x += GRID_SIZE;
+            playerPosition.y += GRID_SIZE;
+            break;
+        case sf::Keyboard::Numpad4:
+            playerPosition.x -= GRID_SIZE;
+            break;
+        case sf::Keyboard::Numpad5:
+            break; // Numpad5 is essentially a "wait" / "pass turn" command
+        case sf::Keyboard::Numpad6:
+            playerPosition.x += GRID_SIZE;
+            break;
+        case sf::Keyboard::Numpad7:
+            playerPosition.x -= GRID_SIZE;
+            playerPosition.y -= GRID_SIZE;
+            break;
+        case sf::Keyboard::Numpad8:
+            playerPosition.y -= GRID_SIZE;
+            break;
+        case sf::Keyboard::Numpad9:
+            playerPosition.x += GRID_SIZE;
+            playerPosition.y -= GRID_SIZE;
+            break;
+    }
+
+    player.setPosition(playerPosition.x, playerPosition.y);
+}
+
 void Game::run() {
     while (window.isOpen()) {
         sf::Event event;
@@ -31,7 +68,7 @@ void Game::run() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             } else if (event.type == sf::Event::KeyPressed) {
-                // TODO: Handle input
+                handleInput(event.key);
             }
         }
 
