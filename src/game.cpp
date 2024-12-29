@@ -50,6 +50,9 @@ void Game::drawGrid() {
 
 void Game::handleInput(sf::Event::KeyEvent key, bool& flag) {
     switch (key.code) {
+        case sf::Keyboard::Numpad0:
+            highlightPath = !highlightPath;
+            break;
         case sf::Keyboard::Numpad1:
             if (playerPosition.x - GRID_SIZE >= 0 && playerPosition.y + GRID_SIZE < WINDOW_HEIGHT) {
                 playerPosition.x -= GRID_SIZE;
@@ -128,7 +131,11 @@ std::vector<sf::Vector2i> Game::findPath(sf::Vector2i start, sf::Vector2i end) {
         {GRID_SIZE, 0},
         {-GRID_SIZE, 0},
         {0, GRID_SIZE},
-        {0, -GRID_SIZE}
+        {0, -GRID_SIZE},
+        {GRID_SIZE, GRID_SIZE},
+        {GRID_SIZE, -GRID_SIZE},
+        {-GRID_SIZE, GRID_SIZE},
+        {-GRID_SIZE, -GRID_SIZE}
     };
 
     while (!openSet.empty()) {
@@ -167,6 +174,20 @@ std::vector<sf::Vector2i> Game::findPath(sf::Vector2i start, sf::Vector2i end) {
     return {};
 }
 
+void Game::drawGoblinPath() {
+    if (!highlightPath || goblinPath.empty()) {
+        return;
+    }
+
+    sf::RectangleShape pathRect(sf::Vector2f(GRID_SIZE, GRID_SIZE));
+    pathRect.setFillColor(sf::Color(255, 255, 0, 50));
+
+    for (const auto& position : goblinPath) {
+        pathRect.setPosition(position.x, position.y);
+        window.draw(pathRect);
+    }
+}
+
 void Game::run() {
     // Initial draw
     window.clear();
@@ -188,17 +209,18 @@ void Game::run() {
         }
 
         if (moveHandled) {
-            std::vector<sf::Vector2i> path = findPath(goblinPosition, playerPosition);
-            if (!path.empty()) {
-                goblinPosition = path[0];
+            goblinPath = findPath(goblinPosition, playerPosition);
+            if (!goblinPath.empty()) {
+                goblinPosition = goblinPath[0];
                 goblin.setPosition(goblinPosition.x, goblinPosition.y);
             }
+        }
 
             window.clear();
             drawGrid();
+            drawGoblinPath();
             player.draw(window, sf::RenderStates::Default);
             goblin.draw(window, sf::RenderStates::Default);
             window.display();
-        }
     }
 }

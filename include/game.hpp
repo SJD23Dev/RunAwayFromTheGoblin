@@ -26,16 +26,19 @@ private:
     std::mt19937 rng;
 
     bool moveHandled = false;
+    bool highlightPath = false;
 
     PlayerCharacter player;
     Goblin goblin;
 
     sf::Vector2i playerPosition;
     sf::Vector2i goblinPosition;
+    std::vector<sf::Vector2i> goblinPath;
 
     void handleInput(sf::Event::KeyEvent event, bool& flag);
     void drawGrid();
     std::vector<sf::Vector2i> findPath(sf::Vector2i start, sf::Vector2i end);
+    void drawGoblinPath();
 
 public:
     Game();
