@@ -1,8 +1,10 @@
 #include "game.hpp"
 
 Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Run Away From The Goblin"),
-               playerPosition(GRID_WIDTH / 2 * GRID_SIZE, GRID_HEIGHT / 2 * GRID_SIZE) {
+               playerPosition(GRID_WIDTH / 2 * GRID_SIZE, GRID_HEIGHT / 2 * GRID_SIZE),
+               goblinPosition(GRID_WIDTH / 2 * GRID_SIZE, GRID_HEIGHT / 2 * GRID_SIZE) {
     player.setPosition(playerPosition.x, playerPosition.y);
+    goblin.setPosition(goblinPosition.x, goblinPosition.y);
 }
 
 void Game::drawGrid() {
@@ -91,6 +93,7 @@ void Game::run() {
         window.clear();
         drawGrid();
         player.draw(window, sf::RenderStates::Default);
+        goblin.draw(window, sf::RenderStates::Default);
         window.display();
     }
 }

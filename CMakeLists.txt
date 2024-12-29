@@ -11,7 +11,8 @@ find_package(SFML 2.5 COMPONENTS
 add_executable(${PROJECT_NAME} 
                src/main.cpp
                src/game.cpp
-               src/playerCharacter.cpp)
+               src/playerCharacter.cpp
+               src/goblin.cpp)
 
 target_include_directories(${PROJECT_NAME}  PRIVATE include)
 

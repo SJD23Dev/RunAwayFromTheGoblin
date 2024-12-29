@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "playerCharacter.hpp"
+#include "goblin.hpp"
 
 class Game {
 private:
@@ -17,8 +18,10 @@ private:
 
     sf::RenderWindow window;
     PlayerCharacter player;
+    Goblin goblin;
 
     sf::Vector2i playerPosition;
+    sf::Vector2i goblinPosition;
 
 public:
     Game();
