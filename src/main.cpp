@@ -1,5 +1,7 @@
-#include <iostream>
+#include "game.hpp"
 
 int main(int, char**){
-    std::cout << "Hello, from RunAwayFromTheGoblin!\n";
+    Game RunAwayFromTheGoblin;
+    RunAwayFromTheGoblin.run();
+    return 0;
 }

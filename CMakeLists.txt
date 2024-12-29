@@ -9,7 +9,8 @@ find_package(SFML 2.5 COMPONENTS
              REQUIRED)
 
 add_executable(${PROJECT_NAME} 
-               src/main.cpp)
+               src/main.cpp
+               src/game.cpp)
 
 target_include_directories(${PROJECT_NAME}  PRIVATE include)
 
