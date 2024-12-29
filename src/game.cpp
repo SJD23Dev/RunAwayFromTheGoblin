@@ -216,11 +216,11 @@ void Game::run() {
             }
         }
 
-            window.clear();
-            drawGrid();
-            drawGoblinPath();
-            player.draw(window, sf::RenderStates::Default);
-            goblin.draw(window, sf::RenderStates::Default);
-            window.display();
+        window.clear();
+        drawGrid();
+        drawGoblinPath();
+        player.draw(window, sf::RenderStates::Default);
+        goblin.draw(window, sf::RenderStates::Default);
+        window.display();
     }
 }
