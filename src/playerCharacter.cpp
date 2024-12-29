@@ -3,7 +3,7 @@
 PlayerCharacter::PlayerCharacter() {
     std::cout << "PlayerCharacter::PlayerCharacter() - Current working directory: " 
               << std::filesystem::current_path() << std::endl;
-    if (!font.loadFromFile("../assets/fonts/Audex-Regular.ttf")) {
+    if (!font.loadFromFile("../../../assets/fonts/Audex-Regular.ttf")) {
         throw std::runtime_error("PlayerCharacter::PlayerCharacter() - Unable to load font from file!");
     }
 

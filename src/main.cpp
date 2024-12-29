@@ -1,7 +1,7 @@
 #include "game.hpp"
 
 int main(int, char**){
-    Game RunAwayFromTheGoblin;
-    RunAwayFromTheGoblin.run();
+    Game game;
+    game.run();
     return 0;
 }
