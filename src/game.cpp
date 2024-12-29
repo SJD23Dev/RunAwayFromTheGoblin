@@ -24,41 +24,57 @@ void Game::drawGrid() {
     }
 }
 
-void Game::handleInput(sf::Event::KeyEvent event) {
-    switch (event.code) {
+void Game::handleInput(sf::Event::KeyEvent key) {
+    switch (key.code) {
         case sf::Keyboard::Numpad1:
-            playerPosition.x -= GRID_SIZE;
-            playerPosition.y += GRID_SIZE;
+            if (playerPosition.x - GRID_SIZE >= 0 && playerPosition.y + GRID_SIZE < WINDOW_HEIGHT) {
+                playerPosition.x -= GRID_SIZE;
+                playerPosition.y += GRID_SIZE;
+            }
             break;
         case sf::Keyboard::Numpad2:
-            playerPosition.y += GRID_SIZE;
+            if (playerPosition.y + GRID_SIZE < WINDOW_HEIGHT) {
+                playerPosition.y += GRID_SIZE;
+            }
             break;
         case sf::Keyboard::Numpad3:
-            playerPosition.x += GRID_SIZE;
-            playerPosition.y += GRID_SIZE;
+            if (playerPosition.x + GRID_SIZE < WINDOW_WIDTH && playerPosition.y + GRID_SIZE < WINDOW_HEIGHT) {
+                playerPosition.x += GRID_SIZE;
+                playerPosition.y += GRID_SIZE;
+            }
             break;
         case sf::Keyboard::Numpad4:
-            playerPosition.x -= GRID_SIZE;
+            if (playerPosition.x - GRID_SIZE >= 0) {
+                playerPosition.x -= GRID_SIZE;
+            }
             break;
         case sf::Keyboard::Numpad5:
             break; // Numpad5 is essentially a "wait" / "pass turn" command
         case sf::Keyboard::Numpad6:
-            playerPosition.x += GRID_SIZE;
+            if (playerPosition.x + GRID_SIZE < WINDOW_WIDTH) {
+                playerPosition.x += GRID_SIZE;
+            }
             break;
         case sf::Keyboard::Numpad7:
-            playerPosition.x -= GRID_SIZE;
-            playerPosition.y -= GRID_SIZE;
+            if (playerPosition.x - GRID_SIZE >= 0 && playerPosition.y - GRID_SIZE >= 0) {
+                playerPosition.x -= GRID_SIZE;
+                playerPosition.y -= GRID_SIZE;
+            }
             break;
         case sf::Keyboard::Numpad8:
-            playerPosition.y -= GRID_SIZE;
+            if (playerPosition.y - GRID_SIZE >= 0) {
+                playerPosition.y -= GRID_SIZE;
+            }
             break;
         case sf::Keyboard::Numpad9:
-            playerPosition.x += GRID_SIZE;
-            playerPosition.y -= GRID_SIZE;
+            if (playerPosition.x + GRID_SIZE < WINDOW_WIDTH && playerPosition.y - GRID_SIZE >= 0) {
+                playerPosition.x += GRID_SIZE;
+                playerPosition.y -= GRID_SIZE;
+            }
             break;
     }
 
-    player.setPosition(playerPosition.x, playerPosition.y);
+    player.setPosition(playerPosition.x, playerPosition.y); // Update the player's position
 }
 
 void Game::run() {
