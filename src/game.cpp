@@ -3,15 +3,19 @@
 // Functions for A* pathfinding
 namespace std {
     template <>
+    // Custom hash function for sf::Vector2i to use it as a key in unordered_map
     struct hash<sf::Vector2i> {
         std::size_t operator()(const sf::Vector2i& v) const {
+            // Combine the hash values of x and y using XOR to create a unique hash for sf::Vector2i
             return std::hash<int>()(v.x) ^ std::hash<int>()(v.y);
         }
     };
 }
 
+// Comparator for priority queue to compare pairs of (fScore, sf::Vector2i)
 struct CompareVector2i {
     bool operator()(const std::pair<int, sf::Vector2i>& a, const std::pair<int, sf::Vector2i>& b) const {
+        // Compare based on the fScore (first element of the pair)
         return a.first > b.first;
     }
 };
