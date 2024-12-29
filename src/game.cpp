@@ -1,6 +1,25 @@
 #include "game.hpp"
 
-Game::Game() : window(sf::VideoMode(1280, 720), "Run Away From The Goblin") {
+Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Run Away From The Goblin") {
+}
+
+void Game::drawGrid() {
+    // Create a line to represent the grid
+    sf::RectangleShape line(sf::Vector2f(1, WINDOW_HEIGHT));
+    line.setFillColor(sf::Color(195, 183, 183, 175));
+
+    // Draw vertical lines
+    for (int i = 0; i < GRID_WIDTH; i++) {
+        line.setPosition(i * GRID_SIZE, 0);
+        window.draw(line);
+    }
+
+    // Draw horizontal lines
+    line.setSize(sf::Vector2f(WINDOW_WIDTH, 1));
+    for (int i = 0; i < GRID_HEIGHT; i++) {
+        line.setPosition(0, i * GRID_SIZE);
+        window.draw(line);
+    }
 }
 
 void Game::run() {
@@ -15,6 +34,7 @@ void Game::run() {
         }
 
         window.clear();
+        drawGrid();
         player.draw(window, sf::RenderStates::Default);
         window.display();
     }
