@@ -18,6 +18,8 @@ private:
     sf::RenderWindow window;
     PlayerCharacter player;
 
+    sf::Vector2i playerPosition;
+
 public:
     Game();
     void run();

@@ -16,3 +16,12 @@ PlayerCharacter::PlayerCharacter() {
 void PlayerCharacter::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(character, states);
 }
+
+void PlayerCharacter::setPosition(int x, int y) {
+    this->x = x;
+    this->y = y;
+    sf::FloatRect bounds = character.getLocalBounds();
+    character.setPosition(x + (GRID_SIZE / 2) - (bounds.width / 2), 
+                          y + (GRID_SIZE / 2) - (bounds.height / 2)
+    );
+}

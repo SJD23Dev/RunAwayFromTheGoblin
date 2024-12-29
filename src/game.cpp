@@ -1,6 +1,8 @@
 #include "game.hpp"
 
-Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Run Away From The Goblin") {
+Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Run Away From The Goblin"),
+               playerPosition(GRID_WIDTH / 2 * GRID_SIZE, GRID_HEIGHT / 2 * GRID_SIZE) {
+    player.setPosition(playerPosition.x, playerPosition.y);
 }
 
 void Game::drawGrid() {
