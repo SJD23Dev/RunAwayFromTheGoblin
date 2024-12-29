@@ -19,6 +19,12 @@ struct CompareVector2i {
 
 Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Run Away From The Goblin"),
                rng(std::random_device{}()) {
+    sf::Image icon;
+    if (!icon.loadFromFile("../assets/images/icon.png")) {
+        throw std::runtime_error("Game::Game() - Unable to load icon from file!");
+    }
+    window.setIcon(32, 32, icon.getPixelsPtr());
+
     std::uniform_int_distribution<> disX(0, GRID_WIDTH - 1);
     std::uniform_int_distribution<> disY(0, GRID_HEIGHT - 1);
 
