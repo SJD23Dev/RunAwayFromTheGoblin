@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <cmath>
 #include <set>
+#include <random>
 
 #include <SFML/Graphics.hpp>
 
@@ -22,6 +23,7 @@ private:
     const int GRID_HEIGHT = WINDOW_HEIGHT / GRID_SIZE;
 
     sf::RenderWindow window;
+    std::mt19937 rng;
 
     bool moveHandled = false;
 

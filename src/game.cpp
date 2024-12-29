@@ -18,8 +18,13 @@ struct CompareVector2i {
 // End of A* pathfinding functions
 
 Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Run Away From The Goblin"),
-               playerPosition(GRID_WIDTH / 2 * GRID_SIZE, GRID_HEIGHT / 2 * GRID_SIZE),
-               goblinPosition(GRID_WIDTH / 2 * GRID_SIZE, GRID_HEIGHT / 2 * GRID_SIZE) {
+               rng(std::random_device{}()) {
+    std::uniform_int_distribution<> disX(0, GRID_WIDTH - 1);
+    std::uniform_int_distribution<> disY(0, GRID_HEIGHT - 1);
+
+    playerPosition = sf::Vector2i(disX(rng) * GRID_SIZE, disY(rng) * GRID_SIZE);
+    goblinPosition = sf::Vector2i(disX(rng) * GRID_SIZE, disY(rng) * GRID_SIZE);
+
     player.setPosition(playerPosition.x, playerPosition.y);
     goblin.setPosition(goblinPosition.x, goblinPosition.y);
 }
@@ -163,6 +168,14 @@ std::vector<sf::Vector2i> Game::findPath(sf::Vector2i start, sf::Vector2i end) {
 }
 
 void Game::run() {
+    // Initial draw
+    window.clear();
+    drawGrid();
+    player.draw(window, sf::RenderStates::Default);
+    goblin.draw(window, sf::RenderStates::Default);
+    window.display();
+
+    // Main game loop
     while (window.isOpen()) {
         sf::Event event;
         bool moveHandled = false;
