@@ -39,10 +39,9 @@ private:
     sf::Vector2i spawnerPosition;
 
     void handleInput(sf::Event::KeyEvent event, bool& flag);
-    void handleMouseInput(sf::Event::MouseButtonEvent event, bool& flag);
+    void handleMouseInput(sf::Event::MouseButtonEvent event);
     void drawGrid();
     void drawGoblinPath();
-    bool isWall(sf::Vector2i position) const;
 
 public:
     Game();

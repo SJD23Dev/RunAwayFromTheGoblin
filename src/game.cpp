@@ -102,6 +102,15 @@ void Game::handleInput(sf::Event::KeyEvent key, bool& flag) {
     player.setPosition(playerPosition.x, playerPosition.y); // Update the player's position
 }
 
+void Game::handleMouseInput(sf::Event::MouseButtonEvent event) {
+    switch (event.button) {
+        case sf::Mouse::Button::Middle:
+            playerPosition = sf::Vector2i(event.x / GRID_SIZE * GRID_SIZE, event.y / GRID_SIZE * GRID_SIZE);
+            player.setPosition(playerPosition.x, playerPosition.y);
+            break;
+    }
+}
+
 void Game::drawGoblinPath() {
     if (!highlightPath || goblinPath.empty()) {
         return;
@@ -136,7 +145,7 @@ void Game::run() {
             } else if (event.type == sf::Event::KeyPressed) {
                 handleInput(event.key, moveHandled);
             } else if (event.type == sf::Event::MouseButtonPressed) {
-                handleMouseInput(event.mouseButton, moveHandled);
+                handleMouseInput(event.mouseButton);
             }
         }
 
