@@ -1,26 +1,5 @@
 #include "game.hpp"
 
-// Functions for A* pathfinding
-namespace std {
-    template <>
-    // Custom hash function for sf::Vector2i to use it as a key in unordered_map
-    struct hash<sf::Vector2i> {
-        std::size_t operator()(const sf::Vector2i& v) const {
-            // Combine the hash values of x and y using XOR to create a unique hash for sf::Vector2i
-            return std::hash<int>()(v.x) ^ std::hash<int>()(v.y);
-        }
-    };
-}
-
-// Comparator for priority queue to compare pairs of (fScore, sf::Vector2i)
-struct CompareVector2i {
-    bool operator()(const std::pair<int, sf::Vector2i>& a, const std::pair<int, sf::Vector2i>& b) const {
-        // Compare based on the fScore (first element of the pair)
-        return a.first > b.first;
-    }
-};
-// End of A* pathfinding functions
-
 Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Run Away From The Goblin"),
                rng(std::random_device{}()) {
     sf::Image icon;
@@ -123,118 +102,6 @@ void Game::handleInput(sf::Event::KeyEvent key, bool& flag) {
     player.setPosition(playerPosition.x, playerPosition.y); // Update the player's position
 }
 
-void Game::handleMouseInput(sf::Event::MouseButtonEvent event, bool& flag) {
-    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-    sf::Vector2i gridPosition = {mousePosition.x / GRID_SIZE * GRID_SIZE, 
-                                 mousePosition.y / GRID_SIZE * GRID_SIZE};
-
-    switch (event.button) {
-        case sf::Mouse::Button::Right:
-            if (!isWall(gridPosition)) {
-                auto wall = std::make_unique<Wall>(gridPosition);
-                walls.push_back(std::move(wall));
-                flag = true;
-            }
-            break;
-        case sf::Mouse::Button::Left:
-            walls.erase(std::remove_if(walls.begin(), walls.end(), [gridPosition](const auto& wall) {
-                return wall->getPosition() == gridPosition;
-            }), walls.end());
-            flag = true;
-            break;
-        case sf::Mouse::Button::Middle:
-            playerPosition = gridPosition;
-            player.setPosition(playerPosition.x, playerPosition.y);
-            break;
-    }
-}
-
-bool Game::isWall(sf::Vector2i position) const {
-    for (const auto& wall : walls) {
-        if (wall->getPosition() == position) {
-            return true;
-        }
-    }
-    return false;
-}
-
-std::vector<sf::Vector2i> Game::findPath(sf::Vector2i start, sf::Vector2i end) {
-    // Heuristic function storing the Manhattan distance between two points
-    auto heuristic = [](sf::Vector2i a, sf::Vector2i b) {
-        return std::abs(a.x - b.x) + std::abs(a.y - b.y);
-    };
-
-    // Initialize the open set (priority queue), cameFrom map, gScore map, and fScore map
-    std::priority_queue<std::pair<int, sf::Vector2i>, std::vector<std::pair<int, sf::Vector2i>>, CompareVector2i> openSet;
-    std::unordered_map<sf::Vector2i, sf::Vector2i, std::hash<sf::Vector2i>> cameFrom;
-    std::unordered_map<sf::Vector2i, int, std::hash<sf::Vector2i>> gScore;
-    std::unordered_map<sf::Vector2i, int, std::hash<sf::Vector2i>> fScore;
-
-    // Add the start position to the open set with a score of 0
-    openSet.emplace(0, start);
-    gScore[start] = 0;
-    fScore[start] = heuristic(start, end);
-
-    // Define the possible movement directions (8 directions)
-    std::vector<sf::Vector2i> directions = {
-        {GRID_SIZE, 0},
-        {-GRID_SIZE, 0},
-        {0, GRID_SIZE},
-        {0, -GRID_SIZE},
-        {GRID_SIZE, GRID_SIZE},
-        {GRID_SIZE, -GRID_SIZE},
-        {-GRID_SIZE, GRID_SIZE},
-        {-GRID_SIZE, -GRID_SIZE}
-    };
-
-    // A* algorithm
-    while (!openSet.empty()) {
-        // // Get the node with the lowest fScore
-        sf::Vector2i current = openSet.top().second;
-        openSet.pop();
-
-        // // If the end node is reached, reconstruct the path
-        if (current == end) {
-            std::vector<sf::Vector2i> path;
-            while (current != start) {
-                path.push_back(current);
-                current = cameFrom[current];
-            }
-            std::reverse(path.begin(), path.end());
-            return path;
-        }
-
-        // Explore neighbors
-        for (const auto& direction : directions) {
-            sf::Vector2i neighbor = current + direction;
-            // Skip out-of-bounds neighbors
-            if (neighbor.x < 0 ||
-                neighbor.x >= WINDOW_WIDTH || 
-                neighbor.y < 0 || 
-                neighbor.y >= WINDOW_HEIGHT) {
-                continue;
-            }
-
-            if (isWall(neighbor)) {
-                continue;
-            }
-
-            // Calculate tentative gScore for the neighbor
-            int tentative_gScore = gScore[current] + GRID_SIZE;
-            // If this path to the neighbor is better, record it
-            if (gScore.find(neighbor) == gScore.end() || tentative_gScore < gScore[neighbor]) {
-                cameFrom[neighbor] = current;
-                gScore[neighbor] = tentative_gScore;
-                fScore[neighbor] = gScore[neighbor] + heuristic(neighbor, end);
-                openSet.emplace(fScore[neighbor], neighbor);
-            }
-        }
-    }
-
-    // Return an empty path if no path is found
-    return {};
-}
-
 void Game::drawGoblinPath() {
     if (!highlightPath || goblinPath.empty()) {
         return;
@@ -257,6 +124,8 @@ void Game::run() {
     goblin.draw(window, sf::RenderStates::Default);
     window.display();
 
+    Pathfinding pathfinding;
+
     // Main game loop
     while (window.isOpen()) {
         sf::Event event;
@@ -272,7 +141,7 @@ void Game::run() {
         }
 
         if (moveHandled) {
-            goblinPath = findPath(goblinPosition, playerPosition);
+            goblinPath = pathfinding.findPath(goblinPosition, playerPosition, GRID_SIZE, WINDOW_WIDTH, WINDOW_HEIGHT);
             if (!goblinPath.empty()) {
                 goblinPosition = goblinPath[0];
                 goblin.setPosition(goblinPosition.x, goblinPosition.y);
