@@ -21,7 +21,7 @@ Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Run Away From
 void Game::drawGrid() {
     // Create a line to represent the grid
     sf::RectangleShape line(sf::Vector2f(1, WINDOW_HEIGHT));
-    line.setFillColor(sf::Color(195, 183, 183, 175));
+    line.setFillColor(sf::Color(195, 183, 183, 75));
 
     // Draw vertical lines
     for (int i = 0; i < GRID_WIDTH; i++) {
@@ -108,7 +108,7 @@ void Game::drawGoblinPath() {
     }
 
     sf::RectangleShape pathRect(sf::Vector2f(GRID_SIZE, GRID_SIZE));
-    pathRect.setFillColor(sf::Color(255, 255, 0, 50));
+    pathRect.setFillColor(sf::Color(255, 255, 0, 25));
 
     for (const auto& position : goblinPath) {
         pathRect.setPosition(position.x, position.y);
