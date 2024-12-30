@@ -12,6 +12,7 @@
 
 #include "playerCharacter.hpp"
 #include "goblin.hpp"
+#include "pathfinding.hpp"
 
 class Game {
 private:
@@ -37,7 +38,6 @@ private:
 
     void handleInput(sf::Event::KeyEvent event, bool& flag);
     void drawGrid();
-    std::vector<sf::Vector2i> findPath(sf::Vector2i start, sf::Vector2i end);
     void drawGoblinPath();
 
 public:
