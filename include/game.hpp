@@ -31,7 +31,6 @@ private:
 
     PlayerCharacter player;
     Goblin goblin;
-    std::vector<std::unique_ptr<Wall>> walls;
 
     sf::Vector2i playerPosition;
     sf::Vector2i goblinPosition;

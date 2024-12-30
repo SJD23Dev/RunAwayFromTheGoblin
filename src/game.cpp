@@ -163,10 +163,6 @@ void Game::run() {
         player.draw(window, sf::RenderStates::Default);
         goblin.draw(window, sf::RenderStates::Default);
 
-        for (const auto& wall : walls) {
-            wall->draw(window, sf::RenderStates::Default);
-        }
-
         window.display();
     }
 }
