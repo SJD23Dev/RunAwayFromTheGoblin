@@ -12,7 +12,8 @@ add_executable(${PROJECT_NAME}
                src/main.cpp
                src/game.cpp
                src/playerCharacter.cpp
-               src/goblin.cpp)
+               src/goblin.cpp
+               src/wall.cpp)
 
 target_include_directories(${PROJECT_NAME}  PRIVATE include)
 

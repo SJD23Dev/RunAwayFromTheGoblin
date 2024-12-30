@@ -12,6 +12,7 @@
 
 #include "playerCharacter.hpp"
 #include "goblin.hpp"
+#include "wall.hpp"
 
 class Game {
 private:
@@ -30,15 +31,19 @@ private:
 
     PlayerCharacter player;
     Goblin goblin;
+    std::vector<std::unique_ptr<Wall>> walls;
 
     sf::Vector2i playerPosition;
     sf::Vector2i goblinPosition;
     std::vector<sf::Vector2i> goblinPath;
+    sf::Vector2i spawnerPosition;
 
     void handleInput(sf::Event::KeyEvent event, bool& flag);
+    void handleMouseInput(sf::Event::MouseButtonEvent event, bool& flag);
     void drawGrid();
     std::vector<sf::Vector2i> findPath(sf::Vector2i start, sf::Vector2i end);
     void drawGoblinPath();
+    bool isWall(sf::Vector2i position) const;
 
 public:
     Game();

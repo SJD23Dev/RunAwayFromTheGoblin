@@ -1,20 +1,14 @@
 #pragma once
 
-#include <iostream>
-#include <filesystem>
-
 #include <SFML/Graphics.hpp>
 
-class Goblin : sf::Drawable {
+class Wall : sf::Drawable {
 private:
     const int GRID_SIZE = 40;
-
-    sf::Font font;
-    sf::Text character;
-    int x, y;
+    sf::RectangleShape structure;
 
 public:
-    Goblin();
+    Wall(sf::Vector2i position);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    void setPosition(int x, int y);
+    sf::Vector2i getPosition();
 };

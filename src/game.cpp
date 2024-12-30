@@ -123,6 +123,41 @@ void Game::handleInput(sf::Event::KeyEvent key, bool& flag) {
     player.setPosition(playerPosition.x, playerPosition.y); // Update the player's position
 }
 
+void Game::handleMouseInput(sf::Event::MouseButtonEvent event, bool& flag) {
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+    sf::Vector2i gridPosition = {mousePosition.x / GRID_SIZE * GRID_SIZE, 
+                                 mousePosition.y / GRID_SIZE * GRID_SIZE};
+
+    switch (event.button) {
+        case sf::Mouse::Button::Right:
+            if (!isWall(gridPosition)) {
+                auto wall = std::make_unique<Wall>(gridPosition);
+                walls.push_back(std::move(wall));
+                flag = true;
+            }
+            break;
+        case sf::Mouse::Button::Left:
+            walls.erase(std::remove_if(walls.begin(), walls.end(), [gridPosition](const auto& wall) {
+                return wall->getPosition() == gridPosition;
+            }), walls.end());
+            flag = true;
+            break;
+        case sf::Mouse::Button::Middle:
+            playerPosition = gridPosition;
+            player.setPosition(playerPosition.x, playerPosition.y);
+            break;
+    }
+}
+
+bool Game::isWall(sf::Vector2i position) const {
+    for (const auto& wall : walls) {
+        if (wall->getPosition() == position) {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::vector<sf::Vector2i> Game::findPath(sf::Vector2i start, sf::Vector2i end) {
     // Heuristic function storing the Manhattan distance between two points
     auto heuristic = [](sf::Vector2i a, sf::Vector2i b) {
@@ -180,6 +215,10 @@ std::vector<sf::Vector2i> Game::findPath(sf::Vector2i start, sf::Vector2i end) {
                 continue;
             }
 
+            if (isWall(neighbor)) {
+                continue;
+            }
+
             // Calculate tentative gScore for the neighbor
             int tentative_gScore = gScore[current] + GRID_SIZE;
             // If this path to the neighbor is better, record it
@@ -227,6 +266,8 @@ void Game::run() {
                 window.close();
             } else if (event.type == sf::Event::KeyPressed) {
                 handleInput(event.key, moveHandled);
+            } else if (event.type == sf::Event::MouseButtonPressed) {
+                handleMouseInput(event.mouseButton, moveHandled);
             }
         }
 
@@ -243,6 +284,11 @@ void Game::run() {
         drawGoblinPath();
         player.draw(window, sf::RenderStates::Default);
         goblin.draw(window, sf::RenderStates::Default);
+
+        for (const auto& wall : walls) {
+            wall->draw(window, sf::RenderStates::Default);
+        }
+
         window.display();
     }
 }
